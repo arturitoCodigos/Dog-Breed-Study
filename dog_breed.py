@@ -13,31 +13,34 @@ def to_scale(image, label):
     return image, label
 
 
-train = train.map(lambda x, y: (x, tf.one_hot(y, depth=120)))  # One Hot encode das labels
-test = test.map(lambda x, y: (x, tf.one_hot(y, depth=120)))  # One Hot encode das labels
 train = train.map(to_scale)
 test = test.map(to_scale)
 
 # Configuração da rede
 neuralNet = tf.keras.Sequential([
-    tf.keras.layers.Conv2D(32, 3, activation="relu"),
+    tf.keras.layers.Conv2D(32, 3, activation="relu", kernel_regularizer="l2"),
     tf.keras.layers.MaxPooling2D((2, 2)),
-    tf.keras.layers.Conv2D(64, 3, activation="relu"),
+    tf.keras.layers.Conv2D(64, 3, activation="relu", kernel_regularizer="l2"),
     tf.keras.layers.MaxPooling2D((2, 2)),
-    tf.keras.layers.Conv2D(128, 3, activation="relu"),
+    tf.keras.layers.Conv2D(128, 3, activation="relu", kernel_regularizer="l2"),
     tf.keras.layers.MaxPooling2D((2, 2)),
-    tf.keras.layers.Conv2D(256, 3, activation="relu"),
+    tf.keras.layers.Conv2D(256, 3, activation="relu", kernel_regularizer="l2"),
     tf.keras.layers.MaxPooling2D((2, 2)),
-    tf.keras.layers.Conv2D(512, 3, activation="relu"),
+    tf.keras.layers.Conv2D(512, 3, activation="relu", kernel_regularizer="l2"),
     tf.keras.layers.MaxPooling2D((2, 2)),
     tf.keras.layers.Flatten(),
-    tf.keras.layers.Dense(32, activation="relu"),
+    tf.keras.layers.Dense(32, activation="relu", kernel_regularizer="l2"),
+    tf.keras.layers.Dense(64, activation="relu", kernel_regularizer="l2"),
+    tf.keras.layers.Dropout(0.1),
+    tf.keras.layers.Dense(128, activation="relu", kernel_regularizer="l2"),
     tf.keras.layers.Dense(120, activation="softmax")
 ])
 
 # Encontrei esta loss na documentação do Keras. Ela serve para multiclass.
-neuralNet.compile(loss="categorical_crossentropy",
-                  optimizer="adam",
+neuralNet.compile(loss="sparse_categorical_crossentropy",
+                  optimizer=tf.keras.optimizers.Adam(lr=0.1),
                   metrics=["accuracy"])
 
-neuralNet.fit(train, epochs=10, batch_size=32)
+neuralNet.fit(train, epochs=25, batch_size=32)
+
+neuralNet.save("./saved_models")
