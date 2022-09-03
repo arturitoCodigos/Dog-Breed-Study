@@ -38,7 +38,7 @@ neuralNet = tf.keras.Sequential([
 
 # Encontrei esta loss na documentação do Keras. Ela serve para multiclass.
 neuralNet.compile(loss="sparse_categorical_crossentropy",
-                  optimizer=tf.keras.optimizers.Adam(lr=0.1),
+                  optimizer=tf.keras.optimizers.Adam(),
                   metrics=["accuracy"])
 
 neuralNet.fit(train, epochs=25, batch_size=32)
