@@ -55,4 +55,4 @@ test_result = neuralNet.evaluate(test)
 test_result = dict(zip(neuralNet.metrics_names, test_result))
 print(test_result)
 
-neuralNet.save("./savedModels_version3/")
+neuralNet.save("./savedModels_version4/")
