@@ -10,7 +10,7 @@ import tensorflow as tf
 def to_scale(image, label):
     image = tf.cast(image, tf.float32)
     image = image / 255.0
-    image = tf.image.resize(image, (150, 150))
+    image = tf.image.resize(image, (224, 224))
     return image, label
 
 
