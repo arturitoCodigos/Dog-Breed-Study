@@ -23,12 +23,9 @@ test = test.map(to_scale)
 pre_treinada = tf.keras.applications.VGG19(weights="imagenet", include_top=False)
 
 pre_treinada_saida = pre_treinada.output
-pre_treinada_saida = tf.keras.layers.GlobalAveragePooling2D()(pre_treinada_saida)
-pre_treinada_saida = tf.keras.layers.Dense(512, activation="relu", kernel_regularizer='l2')(pre_treinada_saida)     # Camada interna para processar features
-pre_treinada_saida = tf.keras.layers.Dense(512, activation="relu", kernel_regularizer='l2')(pre_treinada_saida)     # Camada interna para processar features
-pre_treinada_saida = tf.keras.layers.Dense(512, activation="relu", kernel_regularizer='l2')(pre_treinada_saida)     # Camada interna para processar features
-pre_treinada_saida = tf.keras.layers.Dense(512, activation="relu", kernel_regularizer='l2')(pre_treinada_saida)     # Camada interna para processar features
-pre_treinada_saida = tf.keras.layers.Dense(1024, activation="relu", kernel_regularizer='l2')(pre_treinada_saida)     # Camada interna para processar features
+pre_treinada_saida = tf.keras.layers.Flatten()(pre_treinada_saida)
+pre_treinada_saida = tf.keras.layers.Dense(4096, activation="relu", kernel_regularizer='l2')(pre_treinada_saida)     # Camada interna para processar features
+pre_treinada_saida = tf.keras.layers.Dense(4096, activation="relu", kernel_regularizer='l2')(pre_treinada_saida)     # Camada interna para processar features
 pre_treinada_saida = tf.keras.layers.Dense(120, activation="softmax")(pre_treinada_saida)  # Output
 
 # Construção do modelo
